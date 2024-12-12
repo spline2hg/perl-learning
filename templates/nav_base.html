@@ -1,0 +1,530 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--&lt;!&ndash;    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">&ndash;&gt;-->
+
+<!--    <title>PERL</title>-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-gray-100">-->
+
+
+<!--{% if messages %}-->
+<!--    <div id="alert-container" class="fixed bottom-4 right-4 space-y-2 z-50">-->
+<!--        {% for message in messages %}-->
+<!--            <div class="max-w-sm p-4 bg-{{ message.tags }}-500 text-white rounded-md shadow-lg relative alert">-->
+<!--                {{ message }}-->
+<!--                <button type="button" class="absolute top-0 right-0 mt-1 mr-2 text-white hover:text-gray-200 focus:outline-none" onclick="this.parentElement.remove();">-->
+<!--                    &times;-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--        // Timeout to automatically close the alerts after 5 seconds-->
+<!--        setTimeout(function() {-->
+<!--            document.querySelectorAll('.alert').forEach(alert => {-->
+<!--                alert.remove();-->
+<!--            });-->
+<!--        }, 5000);-->
+<!--    </script>-->
+<!--{% endif %}-->
+
+
+<!--<header class="bg-white shadow-sm">-->
+<!--    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">-->
+<!--        <a href="{% url 'home' %}">-->
+<!--            <div class="text-xl font-bold text-blue-600">PERL</div>-->
+<!--        </a>-->
+<!--        <div class="space-x-4 flex items-center">-->
+<!--            <div class="relative">-->
+<!--                <button id="learnDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Learn-->
+<!--                </button>-->
+<!--                <div id="learnMenu" class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">-->
+<!--                    <div class="py-2">-->
+<!--                        {% if request.user.user_type == 'educator' %}-->
+<!--                        <a href="{% url 'create_classroom' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Create-->
+<!--                            Classroom</a>-->
+<!--                        {% endif %}-->
+<!--                        <a href="{% url 'join_classroom' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Join-->
+<!--                            Classroom</a>-->
+
+<!--                        {% if request.user.user_type == 'educator' %}-->
+<!--                        <a href="{% url 'my_classrooms' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">My-->
+<!--                            Classroom</a>-->
+<!--                        {% else %}-->
+<!--                            <a href="{% url 'joined_classrooms' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Joined-->
+<!--                            Classroom</a>-->
+
+<!--                        {% endif %}-->
+<!--                        <a href="{% url 'classroom_list' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Public-->
+<!--                            Classrooms</a>-->
+
+<!--                        <a href="{% url 'educator_list' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Educators-->
+<!--                            </a>-->
+
+<!--                            <a href="{% url 'requests' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Request List-->
+<!--                            </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+<!--            &lt;!&ndash; Accounts Dropdown &ndash;&gt;-->
+<!--        <div class="relative">-->
+<!--          <button id="accountsDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Accounts</button>-->
+<!--          <div id="accountsMenu" class="absolute left-1 right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">-->
+<!--            <div class="py-2">-->
+<!--              <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Profile</a>-->
+<!--              <a href="{% url 'edit_profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Edit Profile</a>-->
+<!--              <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Logout</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--            <a href="{% url 'classroom_list' %}" class="text-gray-600 hover:text-blue-600">Public-->
+<!--                            Classrooms</a>-->
+
+<!--            {% if request.user.user_type == 'educator' %}-->
+<!--            <a href="{% url 'my_classrooms' %}" class="text-gray-600 hover:text-blue-600">My Classroms </a>-->
+<!--            {% else %}-->
+<!--            <a href="{% url 'joined_classrooms' %}" class="text-gray-600 hover:text-blue-600">Joined Classrooms</a>-->
+<!--            {% endif %}-->
+
+<!--            {% if request.user.is_authenticated %}-->
+<!--            <a href="{% url 'logout' %}">-->
+<!--                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Logout</button>-->
+<!--            </a>-->
+<!--            {% else %}-->
+<!--            <a href="{% url 'register' %}">-->
+<!--                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Sign Up</button>-->
+<!--            </a>-->
+<!--            <a href="{% url 'login' %}">-->
+<!--                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Login</button>-->
+<!--            </a>-->
+<!--            {% endif %}-->
+
+<!--        </div>-->
+<!--    </nav>-->
+<!--</header>-->
+
+<!--<script>-->
+<!--&lt;!&ndash;    const learnDropdown = document.getElementById('learnDropdown');&ndash;&gt;-->
+<!--&lt;!&ndash;    const learnMenu = document.getElementById('learnMenu');&ndash;&gt;-->
+
+<!--&lt;!&ndash;    learnDropdown.addEventListener('click', function(event) {&ndash;&gt;-->
+<!--&lt;!&ndash;      event.stopPropagation();&ndash;&gt;-->
+<!--&lt;!&ndash;      learnMenu.classList.toggle('hidden');&ndash;&gt;-->
+<!--&lt;!&ndash;    });&ndash;&gt;-->
+
+<!--&lt;!&ndash;    document.addEventListener('click', function(event) {&ndash;&gt;-->
+<!--&lt;!&ndash;      if (!learnDropdown.contains(event.target) && !learnMenu.contains(event.target)) {&ndash;&gt;-->
+<!--&lt;!&ndash;        learnMenu.classList.add('hidden');&ndash;&gt;-->
+<!--&lt;!&ndash;      }&ndash;&gt;-->
+<!--&lt;!&ndash;    });&ndash;&gt;-->
+
+<!--&lt;!&ndash;    // Prevent the dropdown from closing when clicking inside it&ndash;&gt;-->
+<!--&lt;!&ndash;    learnMenu.addEventListener('click', function(event) {&ndash;&gt;-->
+<!--&lt;!&ndash;      event.stopPropagation();&ndash;&gt;-->
+<!--&lt;!&ndash;    });&ndash;&gt;-->
+
+
+<!--    const learnDropdown = document.getElementById('learnDropdown');-->
+<!--    const learnMenu = document.getElementById('learnMenu');-->
+<!--    const accountsDropdown = document.getElementById('accountsDropdown');-->
+<!--    const accountsMenu = document.getElementById('accountsMenu');-->
+
+<!--    function toggleMenu(menu) {-->
+<!--      menu.classList.toggle('hidden');-->
+<!--    }-->
+
+<!--    learnDropdown.addEventListener('click', function(event) {-->
+<!--      event.stopPropagation();-->
+<!--      toggleMenu(learnMenu);-->
+<!--    });-->
+
+<!--    accountsDropdown.addEventListener('click', function(event) {-->
+<!--      event.stopPropagation();-->
+<!--      toggleMenu(accountsMenu);-->
+<!--    });-->
+
+<!--    document.addEventListener('click', function(event) {-->
+<!--      if (!learnDropdown.contains(event.target) && !learnMenu.contains(event.target)) {-->
+<!--        learnMenu.classList.add('hidden');-->
+<!--      }-->
+<!--      if (!accountsDropdown.contains(event.target) && !accountsMenu.contains(event.target)) {-->
+<!--        accountsMenu.classList.add('hidden');-->
+<!--      }-->
+<!--    });-->
+
+<!--    // Prevent the dropdowns from closing when clicking inside them-->
+<!--    learnMenu.addEventListener('click', function(event) {-->
+<!--      event.stopPropagation();-->
+<!--    });-->
+
+<!--    accountsMenu.addEventListener('click', function(event) {-->
+<!--      event.stopPropagation();-->
+<!--    });-->
+
+
+<!--    function tglNv_y9x2b() {-->
+<!--    const sdb = document.getElementById("sdb_1w5nx");-->
+<!--    const mn = document.getElementById("mn_h8j2z");-->
+<!--    const body = document.body;-->
+<!--    const ovrlay = document.getElementById("ovrlay_b2p3x");-->
+
+<!--    if (sdb.classList.contains("active")) {-->
+<!--        clsNv_w7d2y();-->
+<!--    } else {-->
+<!--        sdb.classList.add("active");-->
+<!--        mn.style.marginLeft = "250px";-->
+<!--        body.classList.add("sdb_actv_j2n4w");-->
+<!--        ovrlay.style.display = "block";-->
+<!--    }-->
+<!--}-->
+
+<!--function clsNv_w7d2y() {-->
+<!--    const sdb = document.getElementById("sdb_1w5nx");-->
+<!--    const mn = document.getElementById("mn_h8j2z");-->
+<!--    const body = document.body;-->
+<!--    const ovrlay = document.getElementById("ovrlay_b2p3x");-->
+
+<!--    sdb.classList.remove("active");-->
+<!--    mn.style.marginLeft = "0";-->
+<!--    body.classList.remove("sdb_actv_j2n4w");-->
+<!--    ovrlay.style.display = "none";-->
+<!--}-->
+
+
+<!--    setTimeout(function() {-->
+<!--            document.querySelectorAll('.alert').forEach(alert => alert.remove());-->
+<!--        }, 5000);-->
+
+<!--</script>-->
+<!--</body>-->
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+
+<!--</html>-->
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PERL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .alert-animate-in {
+            animation: slideInRight 0.5s ease-out;
+        }
+        .alert-animate-out {
+            animation: fadeOut 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+
+{% if messages %}
+    <div id="alert-container" class="fixed top-4 right-4 space-y-2 z-50 w-80">
+        {% for message in messages %}
+            {% with message.tags as tags %}
+            <div class="p-4 rounded-md shadow-lg relative alert alert-animate-in mb-4
+                        {% if tags == 'success' %}bg-green-500 text-white
+                        {% elif tags == 'error' %}bg-red-500 text-white
+                        {% elif tags == 'warning' %}bg-yellow-500 text-white
+                        {% elif tags == 'info' %}bg-blue-500 text-white
+                        {% else %}bg-gray-500 text-white{% endif %}">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        {% if tags == 'success' %}
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        {% elif tags == 'error' %}
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        {% elif tags == 'warning' %}
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        {% elif tags == 'info' %}
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                        {% else %}
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                        {% endif %}
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">
+                            {{ message }}
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="absolute top-1 right-1 text-white hover:text-gray-200 focus:outline-none" onclick="closeAlert(this.parentElement);">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+
+    <script>
+        function closeAlert(alert) {
+            alert.classList.add('alert-animate-out');
+            setTimeout(() => {
+                alert.remove();
+            }, 500);
+        }
+
+        // Auto-close alerts after 5 seconds
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(alert => {
+                closeAlert(alert);
+            });
+        }, 5000);
+    </script>
+{% endif %}
+
+<!-- Rest of your existing body content -->
+
+
+
+
+
+
+
+<header class="bg-white shadow-sm">
+    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="{% url 'home' %}">
+            <div class="text-xl font-bold text-blue-600">PERL</div>
+        </a>
+        <div class="space-x-4 flex items-center">
+            <div class="relative">
+
+                {% if request.user.user_type == 'educator' %}
+                <button id="learnDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Explore
+                </button>
+                {% else %}
+                    <button id="learnDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Learn
+                </button>
+                {% endif %}
+
+<!--                <button id="learnDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Learn-->
+<!--                </button>-->
+                <div id="learnMenu" class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">
+                    <div class="py-2">
+                        {% if request.user.user_type == 'educator' %}
+                        <a href="{% url 'create_classroom' %}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Create
+                            Classroom</a>
+                        {% endif %}
+                        <a href="{% url 'join_classroom' %}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Join
+                            Classroom</a>
+
+<!--                        {% if request.user.user_type == 'educator' %}-->
+<!--                        <a href="{% url 'my_classrooms' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">My-->
+<!--                            Classroom</a>-->
+<!--                        {% else %}-->
+<!--                            <a href="{% url 'joined_classrooms' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Joined-->
+<!--                            Classroom</a>-->
+
+<!--                        {% endif %}-->
+<!--                        <a href="{% url 'classroom_list' %}"-->
+<!--                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Public-->
+<!--                            Classrooms</a>-->
+
+                        <a href="{% url 'educator_list' %}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Educators
+                            </a>
+
+
+
+                            <a href="{% url 'requests' %}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Request List
+                            </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Accounts Dropdown -->
+        <div class="relative">
+          <button id="accountsDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Accounts</button>
+          <div id="accountsMenu" class="absolute left-1 right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">
+            <div class="py-2">
+              <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Profile</a>
+              <a href="{% url 'edit_profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Edit Profile</a>
+              <a href="{% url 'message_tab' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Messages</a>
+<!--              <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Logout</a>-->
+            </div>
+          </div>
+        </div>
+
+            <a href="{% url 'classroom_list' %}" class="text-gray-600 hover:text-blue-600">Public
+                            Classrooms</a>
+
+            {% if request.user.user_type == 'educator' %}
+            <a href="{% url 'my_classrooms' %}" class="text-gray-600 hover:text-blue-600">My Classroms </a>
+
+            {% elif request.user.user_type == 'learner' %}
+            <a href="{% url 'joined_classrooms' %}" class="text-gray-600 hover:text-blue-600">Joined Classrooms</a>
+            {% else %}
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Logout</button>
+            </a>
+            {% else %}
+            <a href="{% url 'register' %}">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Sign Up</button>
+            </a>
+            <a href="{% url 'login' %}">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Login</button>
+            </a>
+            {% endif %}
+
+        </div>
+    </nav>
+</header>
+
+<script>
+<!--    const learnDropdown = document.getElementById('learnDropdown');-->
+<!--    const learnMenu = document.getElementById('learnMenu');-->
+
+<!--    learnDropdown.addEventListener('click', function(event) {-->
+<!--      event.stopPropagation();-->
+<!--      learnMenu.classList.toggle('hidden');-->
+<!--    });-->
+
+<!--    document.addEventListener('click', function(event) {-->
+<!--      if (!learnDropdown.contains(event.target) && !learnMenu.contains(event.target)) {-->
+<!--        learnMenu.classList.add('hidden');-->
+<!--      }-->
+<!--    });-->
+
+<!--    // Prevent the dropdown from closing when clicking inside it-->
+<!--    learnMenu.addEventListener('click', function(event) {-->
+<!--      event.stopPropagation();-->
+<!--    });-->
+
+
+    const learnDropdown = document.getElementById('learnDropdown');
+    const learnMenu = document.getElementById('learnMenu');
+    const accountsDropdown = document.getElementById('accountsDropdown');
+    const accountsMenu = document.getElementById('accountsMenu');
+
+    function toggleMenu(menu) {
+      menu.classList.toggle('hidden');
+    }
+
+    learnDropdown.addEventListener('click', function(event) {
+      event.stopPropagation();
+      toggleMenu(learnMenu);
+    });
+
+    accountsDropdown.addEventListener('click', function(event) {
+      event.stopPropagation();
+      toggleMenu(accountsMenu);
+    });
+
+    document.addEventListener('click', function(event) {
+      if (!learnDropdown.contains(event.target) && !learnMenu.contains(event.target)) {
+        learnMenu.classList.add('hidden');
+      }
+      if (!accountsDropdown.contains(event.target) && !accountsMenu.contains(event.target)) {
+        accountsMenu.classList.add('hidden');
+      }
+    });
+
+    // Prevent the dropdowns from closing when clicking inside them
+    learnMenu.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+
+    accountsMenu.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+
+
+    function tglNv_y9x2b() {
+    const sdb = document.getElementById("sdb_1w5nx");
+    const mn = document.getElementById("mn_h8j2z");
+    const body = document.body;
+    const ovrlay = document.getElementById("ovrlay_b2p3x");
+
+    if (sdb.classList.contains("active")) {
+        clsNv_w7d2y();
+    } else {
+        sdb.classList.add("active");
+        mn.style.marginLeft = "250px";
+        body.classList.add("sdb_actv_j2n4w");
+        ovrlay.style.display = "block";
+    }
+}
+
+function clsNv_w7d2y() {
+    const sdb = document.getElementById("sdb_1w5nx");
+    const mn = document.getElementById("mn_h8j2z");
+    const body = document.body;
+    const ovrlay = document.getElementById("ovrlay_b2p3x");
+
+    sdb.classList.remove("active");
+    mn.style.marginLeft = "0";
+    body.classList.remove("sdb_actv_j2n4w");
+    ovrlay.style.display = "none";
+}
+
+
+    setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(alert => alert.remove());
+        }, 3000);
+<!--made form 5000 to 3000-->
+</script>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+</html>

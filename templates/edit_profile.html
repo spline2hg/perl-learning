@@ -1,0 +1,271 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+
+        .profile-form {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 500px;
+            margin-top: 10px;
+        }
+
+        .profile-form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group .errorlist {
+            color: #dc3545;
+            margin-top: 5px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .profile-pic-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .profile-pic-wrapper {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .profile-pic-wrapper input[type="file"] {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+<!--        .banner-pic-wrapper {-->
+<!--            position: relative;-->
+<!--            width: 450px;-->
+<!--            height: 150px;-->
+<!--            overflow: hidden;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .banner-pic {-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--            object-fit: cover;-->
+<!--            border-radius: 50%;-->
+<!--            object-fit: contain;-->
+<!--        }-->
+
+<!--        .banner-pic-wrapper input[type="file"] {-->
+<!--            opacity: 0;-->
+<!--            position: absolute;-->
+<!--            top: 0;-->
+<!--            left: 0;-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .banner-image {-->
+<!--            width: 500px;-->
+<!--            height: 700px;-->
+<!--            object-fit: contain;-->
+<!--            border-radius: 10px;-->
+<!--        }-->
+
+        .banner-pic-wrapper {
+            position: relative;
+            width: 450px;
+            height: 150px;
+            overflow: hidden;
+            cursor: pointer;
+            object-fit: contain; /* Ensures the image is contained within the wrapper */
+
+        }
+
+        .banner-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensures the image is contained within the wrapper */
+        }
+
+        .banner-pic-wrapper input[type="file"] {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            object-fit: contain; /* Ensures the image is contained within the wrapper */
+
+        }
+
+        .banner-image {
+
+            object-fit: contain; /* Use contain to fit the image entirely */
+            border-radius: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="w-full">
+        {% include 'nav_base.html' %}
+    </div>
+    <div class="profile-form">
+        <h1>Edit Profile</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form %}
+                <div class="form-group">
+                    <label for="{{ form.profile_image.id_for_label }}">Profile Image:</label>
+                    <div class="profile-pic-container">
+                        <div class="profile-pic-wrapper">
+                            <img src="{% if user.learnerprofile.profile_image %}
+                                         {{ user.learnerprofile.profile_image.url }}
+                                     {% elif user.educatorprofile.profile_image %}
+                                         {{ user.educatorprofile.profile_image.url }}
+                                     {% else %}
+                                         {% static 'images/prof_images/default_profile.jpg' %}
+                                     {% endif %}"
+                                 alt="Profile Image" class="profile-pic">
+                            {{ form.profile_image }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="banner-pic-wrapper">
+                        <label for="{{ form.banner_image.id_for_label }}">Banner Image:</label>
+                    <img src="{% if user.learnerprofile.banner_image %}
+                                  {{ user.learnerprofile.banner_image.url }}
+                              {% elif user.educatorprofile.banner_image %}
+                                  {{ user.educatorprofile.banner_image.url }}
+                              {% else %}
+                                  {% static 'images/prof_images/default_banner.jpg' %}
+                              {% endif %}"
+                         alt="Banner Image" class="banner-image">
+                    {{ form.banner_image }}
+                    </div>
+                </div>
+
+
+
+
+                {% if form.interests %}
+                    <div class="form-group">
+                        <label for="{{ form.interests.id_for_label }}">Interests:</label>
+                        {{ form.interests }}
+                    </div>
+                {% endif %}
+
+
+                    <div class="form-group">
+                        <label for="{{ form.age.id_for_label }}">Age:</label>
+                        {{ form.age }}
+                    </div>
+
+
+                {% if form.location %}
+                    <div class="form-group">
+                        <label for="{{ form.location.id_for_label }}">Location:</label>
+                        {{ form.location }}
+                    </div>
+                {% endif %}
+
+                {% if form.subjects %}
+                    <div class="form-group">
+                        <label for="{{ form.subjects.id_for_label }}">Subjects:</label>
+                        {{ form.subjects }}
+                    </div>
+                {% endif %}
+
+                {% if form.qualification %}
+                    <div class="form-group">
+                        <label for="{{ form.qualification.id_for_label }}">Qualification:</label>
+                        {{ form.qualification }}
+                    </div>
+                {% endif %}
+                            <button type="submit">Submit</button>
+
+            {% else %}
+                <p>No form available for your user type.</p>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,693 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeMentor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Flowbite CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@latest/dist/flowbite.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-100">
+  <header class="bg-white shadow-sm">
+    <nav class="container mx-auto px-2 py-3 flex justify-between items-center space-x-2">
+      <button class="text-gray-600 hover:text-blue-600 focus:outline-none" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+      <div class="text-xl font-bold text-blue-600">CodeMentor</div>
+      <div class="space-x-4 flex items-center">
+        <div class="relative">
+          <button id="learnDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Learn</button>
+          <div id="learnMenu" class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">
+            <div class="py-2">
+              <p>Hello {{ request.user }}</p>
+              <a href="{% url 'create_classroom' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Create Classroom</a>
+              <a href="{% url 'join_classroom' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Join Classroom</a>
+              <a href="{% url 'my_classrooms' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">My Classroom</a>
+              <a href="{% url 'classroom_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Public Classrooms</a>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="text-gray-600 hover:text-blue-600">Courses</a>
+        <a href="#" class="text-gray-600 hover:text-blue-600">Mentors</a>
+        <a href="#" class="text-gray-600 hover:text-blue-600">About</a>
+        <a href="{% url 'register' %}">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Sign Up</button>
+        </a>
+        <a href="{% url 'login' %}">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Login</button>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <script>
+    const learnDropdown = document.getElementById('learnDropdown');
+    const learnMenu = document.getElementById('learnMenu');
+
+    learnDropdown.addEventListener('click', function(event) {
+      event.stopPropagation();
+      learnMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', function(event) {
+      if (!learnDropdown.contains(event.target) && !learnMenu.contains(event.target)) {
+        learnMenu.classList.add('hidden');
+      }
+    });
+
+    // Prevent the dropdown from closing when clicking inside it
+    learnMenu.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@latest/dist/flowbite.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+
+
+
+<!--<a href="{% url 'join_classroom' %}"> join classroom</a>-->
+<!--<a href="{% url 'my_classrooms' %}"> My classroom</a>-->
+
+
+
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <!-- Tailwind CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Flowbite CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@latest/dist/flowbite.min.css" rel="stylesheet">
+</head>
+<body>
+  {% include 'nav_base.html' %}
+
+<a href="{% url 'join_classroom' %}" class="text-blue-500 hover:underline">Join Classroom</a>
+<a href="{% url 'my_classrooms' %}" class="text-blue-500 hover:underline">My Classrooms</a>
+
+<!-- drawer init and show -->
+<!--<div >-->
+<!--    <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">-->
+<!--        Show navigation-->
+<!--    </button>-->
+<!--</div>-->
+
+<!-- drawer component -->
+<div id="drawer-navigation" class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-64 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
+    <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
+    <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+        <span class="sr-only">Close menu</span>
+    </button>
+    <div class="py-4 overflow-y-auto">
+        <ul class="space-y-2 font-medium">
+            <li>
+                <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Settings
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<section class="bg-gray-900 text-white">
+  <div class="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:h-screen lg:items-center">
+    <div class="mx-auto max-w-3xl text-center">
+      <h1
+        class="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-5xl"
+      >
+        Discover a new way of learning
+
+
+        <span class="sm:block"> Connect together in interactive online spaces. </span>
+      </h1>
+
+      <p class="mx-auto mt-4 max-w-xl sm:text-xl/relaxed">
+        - Join classrooms created by expert educators<br>
+- Connect with peers and mentors worldwide<br>
+- Learn at your own pace with flexible scheduling<br>
+      </p>
+
+                    <p>Hello {{ request.user }}</p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a
+          class="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
+          href="#"
+        >
+          Get Started
+        </a>
+
+        <a
+          class="block w-full rounded border border-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring active:bg-blue-500 sm:w-auto"
+          href="#"
+        >
+          Learn More
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Flowbite JS via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@latest/dist/flowbite.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!--          {% if request.user.is_authenticated %}-->
+<!--        <a href="{% url 'login' %}">-->
+<!--          <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Login</button>-->
+<!--        </a>-->
+<!--          {% else %}-->
+<!--          <a href="{% url 'login' %}">-->
+<!--          <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Logout</button>-->
+<!--        </a>-->
+<!--          {% endif %}-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+nav_final
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeMentor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100">
+  <header class="bg-white shadow-sm">
+    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="{% url 'home' %}">
+      <div class="text-xl font-bold text-blue-600">CodeMentor</div>
+      </a>
+        <div class="space-x-4 flex items-center">
+        <div class="relative">
+          <button id="learnDropdown" class="text-gray-600 hover:text-blue-600 py-2 focus:outline-none">Learn</button>
+          <div id="learnMenu" class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden z-50">
+            <div class="py-2">
+              <a href="{% url 'create_classroom' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Create Classroom</a>
+              <a href="{% url 'join_classroom' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Join Classroom</a>
+              <a href="{% url 'my_classrooms' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">My Classroom</a>
+              <a href="{% url 'classroom_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">Public Classrooms</a>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="text-gray-600 hover:text-blue-600">Courses</a>
+        <a href="#" class="text-gray-600 hover:text-blue-600">Mentors</a>
+        <a href="#" class="text-gray-600 hover:text-blue-600">About</a>
+
+
+          {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Logout</button>
+        </a>
+    {% else %}
+          <a href="{% url 'register' %}">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Sign Up</button>
+        </a>
+        <a href="{% url 'login' %}">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Login</button>
+        </a>
+    {% endif %}
+
+      </div>
+    </nav>
+  </header>
+
+  <script>
+    const learnDropdown = document.getElementById('learnDropdown');
+    const learnMenu = document.getElementById('learnMenu');
+
+    learnDropdown.addEventListener('click', function(event) {
+      event.stopPropagation();
+      learnMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', function(event) {
+      if (!learnDropdown.contains(event.target) && !learnMenu.contains(event.target)) {
+        learnMenu.classList.add('hidden');
+      }
+    });
+
+    // Prevent the dropdown from closing when clicking inside it
+    learnMenu.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeMentor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@latest/dist/flowbite.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-100">
+  <header class="bg-white shadow-sm">
+    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div>
+        <button class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <a href="{% url 'home' %}">
+        <div class="text-xl font-bold text-blue-600">CodeMentor</div>
+      </a>
+
+      <div class="space-x-4 flex items-center">
+        <!-- ... (rest of the navigation items) ... -->
+      </div>
+    </nav>
+  </header>
+
+  <!-- Drawer component -->
+  <div id="drawer-navigation" class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-64 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
+    <!-- ... (drawer content) ... -->
+  </div>
+
+  <!-- Overlay -->
+  <div id="drawer-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-30 hidden"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@latest/dist/flowbite.min.js"></script>
+  <script>
+    const drawerToggle = document.querySelector('[data-drawer-target="drawer-navigation"]');
+    const drawer = document.getElementById('drawer-navigation');
+    const overlay = document.getElementById('drawer-overlay');
+
+    drawerToggle.addEventListener('click', toggleDrawer);
+    overlay.addEventListener('click', closeDrawer);
+
+    function toggleDrawer() {
+      drawer.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    function closeDrawer() {
+      drawer.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create clasroom
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<form method="POST" action="">-->
+<!--    {% csrf_token %}-->
+<!--&lt;!&ndash;    {{ form.name.label }}  &lt;!&ndash; Renders form fields automatically &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    {{ form.name }}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {{ form.description.label }}  &lt;!&ndash; Renders form fields automatically &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    {{ form.description }}&ndash;&gt;-->
+
+<!--    <input name="name" type="text" id="classroomName" placeholder="Enter classroom name">-->
+<!--    <input name="description" type="text" id="educatorName" placeholder="Enter your name">-->
+
+<!--    &lt;!&ndash; Renders form fields automatically &ndash;&gt;-->
+<!--    <button type="submit">Submit</button>-->
+<!--</form>-->
+
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+<!--<html><head>-->
+<!--<title>VirtualEdu - Create Your Virtual Classroom</title>-->
+<!--<meta charset="UTF-8">-->
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">-->
+
+<!--<link href="https://cdn.tailwindcss.com" rel="stylesheet">-->
+
+<!--    <style>-->
+<!--    body {-->
+<!--        font-family: Arial, sans-serif;-->
+<!--        line-height: 1.6;-->
+<!--        color: #333;-->
+<!--        max-width: 800px;-->
+<!--        margin: 0 auto;-->
+<!--        padding: 20px;-->
+<!--        background-color: #f4f4f4;-->
+<!--    }-->
+<!--    h1, h2 {-->
+<!--        color: #2c3e50;-->
+<!--    }-->
+<!--    .container {-->
+<!--        background-color: #fff;-->
+<!--        padding: 20px;-->
+<!--        border-radius: 5px;-->
+<!--        box-shadow: 0 2px 5px rgba(0,0,0,0.1);-->
+<!--    }-->
+<!--    input, button {-->
+<!--        width: 100%;-->
+<!--        padding: 10px;-->
+<!--        margin-bottom: 10px;-->
+<!--        border: 1px solid #ddd;-->
+<!--        border-radius: 4px;-->
+<!--    }-->
+<!--    button {-->
+<!--        background-color: #3498db;-->
+<!--        color: #fff;-->
+<!--        border: none;-->
+<!--        cursor: pointer;-->
+<!--        transition: background-color 0.3s ease;-->
+<!--    }-->
+<!--    button:hover {-->
+<!--        background-color: #2980b9;-->
+<!--    }-->
+<!--    #studentList {-->
+<!--        list-style-type: none;-->
+<!--        padding: 0;-->
+<!--    }-->
+<!--    #studentList li {-->
+<!--        background-color: #ecf0f1;-->
+<!--        margin-bottom: 5px;-->
+<!--        padding: 10px;-->
+<!--        border-radius: 4px;-->
+<!--    }-->
+<!--    #classroomCode {-->
+<!--        font-size: 24px;-->
+<!--        font-weight: bold;-->
+<!--        text-align: center;-->
+<!--        margin: 20px 0;-->
+<!--        padding: 10px;-->
+<!--        background-color: #e74c3c;-->
+<!--        color: #fff;-->
+<!--        border-radius: 4px;-->
+<!--    }-->
+<!--    @media (max-width: 600px) {-->
+<!--        body {-->
+<!--            padding: 10px;-->
+<!--        }-->
+<!--    }-->
+
+<!--    .message {-->
+<!--            padding: 10px;-->
+<!--            border-radius: 4px;-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+<!--        .message.success {-->
+<!--            background-color: #dff0d8;-->
+<!--            color: #3c763d;-->
+<!--        }-->
+<!--        .message.error {-->
+<!--            background-color: #f2dede;-->
+<!--            color: #a94442;-->
+<!--        }-->
+<!--</style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--&lt;!&ndash;    <div class="w-full">&ndash;&gt;-->
+<!--        {% include 'nav_base.html' %}-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+
+<!--    <div class="container">-->
+<!--        <h1>VirtualEdu Classroom Creator</h1>-->
+<!--        <div id="educatorSection">-->
+<!--            <h2>Create a New Classroom</h2>-->
+<!--            <form method="POST" action="">-->
+<!--                {% csrf_token %}-->
+
+<!--                <input name="name" type="text" id="classroomName" placeholder="Enter classroom name">-->
+<!--                <input name="description" type="text" id="educatorName" placeholder="Enter your name">-->
+
+<!--                &lt;!&ndash; Renders form fields automatically &ndash;&gt;-->
+<!--                <button type="submit">Submit</button>-->
+<!--                <p>{{ form.active }}</p>-->
+<!--            </form>-->
+
+<!--        </div>-->
+<!--        <div id="classroomSection" style="display:none;">-->
+<!--            <h2 id="classroomTitle"></h2>-->
+<!--            <p>Educator: <span id="educatorNameDisplay"></span></p>-->
+<!--            <div id="classroomCode"></div>-->
+<!--            <h3>Joined Students</h3>-->
+<!--            <ul id="studentList"></ul>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div>-->
+<!--        {% if form.active %}-->
+<!--        <div id="successMessage">-->
+<!--            <h2>Classroom Created!</h2>-->
+<!--            <p>Your classroom has been created successfully. Click <a href="{% url 'dashboard' %}">here</a> to view it.</p>-->
+<!--        </div>-->
+<!--        <form method="POST" action="{% url 'remove_classroom' %}">-->
+<!--            {% csrf_token %}-->
+<!--            <button type="submit" class="btn btn-danger">Remove Classroom</button>-->
+<!--        </form>-->
+<!--        {% endif %}-->
+
+<!--&lt;!&ndash;        {% if messages %}&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="messages">&ndash;&gt;-->
+<!--&lt;!&ndash;                {% for message in messages %}&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="message {{ message.tags }}">{{ message }}</div>&ndash;&gt;-->
+<!--&lt;!&ndash;                {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% endif %}&ndash;&gt;-->
+<!--        {% if messages %}-->
+<!--            {% for message in messages %}-->
+<!--                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">-->
+<!--                    {{ message }}-->
+<!--                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            {% endfor %}-->
+<!--            <script>-->
+<!--                setTimeout(function() {-->
+<!--                    $('.alert').alert('close');-->
+<!--                }, 5000);-->
+<!--            </script>-->
+<!--        {% endif %}-->
+
+<!--    </div>-->
+
+
+<!--<script>-->
+<!--function tglNv_y9x2b() {-->
+<!--    const sdb = document.getElementById("sdb_1w5nx");-->
+<!--    const mn = document.getElementById("mn_h8j2z");-->
+<!--    const body = document.body;-->
+<!--    const ovrlay = document.getElementById("ovrlay_b2p3x");-->
+
+<!--    if (sdb.classList.contains("active")) {-->
+<!--        clsNv_w7d2y();-->
+<!--    } else {-->
+<!--        sdb.classList.add("active");-->
+<!--        mn.style.marginLeft = "250px";-->
+<!--        body.classList.add("sdb_actv_j2n4w");-->
+<!--        ovrlay.style.display = "block";-->
+<!--    }-->
+<!--}-->
+
+<!--function clsNv_w7d2y() {-->
+<!--    const sdb = document.getElementById("sdb_1w5nx");-->
+<!--    const mn = document.getElementById("mn_h8j2z");-->
+<!--    const body = document.body;-->
+<!--    const ovrlay = document.getElementById("ovrlay_b2p3x");-->
+
+<!--    sdb.classList.remove("active");-->
+<!--    mn.style.marginLeft = "0";-->
+<!--    body.classList.remove("sdb_actv_j2n4w");-->
+<!--    ovrlay.style.display = "none";-->
+<!--}-->
+<!--</script>-->
+
+<!--</body>-->
+
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+
+<!--</html>-->

@@ -1,0 +1,195 @@
+<!--{% load static %}-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+{% include 'nav_base.html' %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container mx-auto p-4 flex flex-col md:flex-row">
+        <div class="md:w-1/3 bg-white rounded-lg shadow-lg p-6 mb-4 md:mb-0">
+            <!-- Banner Picture Wrapper -->
+            <div class="relative h-48 w-full">
+                <img class="w-full h-full object-cover"
+                     src="{% if user.learnerprofile.banner_image %}
+                              {{ user.learnerprofile.banner_image.url }}
+                           {% elif user.educatorprofile.banner_image %}
+                              {{ user.educatorprofile.banner_image.url }}
+                           {% else %}
+                              {% static 'images/prof_images/default_banner.jpg' %}
+                           {% endif %}"
+                     alt="Banner Image">
+                <label for="{{ form.banner_image.id_for_label }}"
+                       class="absolute inset-0 w-full h-full cursor-pointer flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <span class="text-white text-lg font-semibold">Change Banner</span>
+                </label>
+                {{ form.banner_image }}
+            </div>
+
+            <!-- Profile Picture Container and Wrapper -->
+            <div class="relative justify-center -mt-16 flex">
+                <div class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white bg-white">
+                    <img src="{% if user.learnerprofile.profile_image %}
+                       {{ user.learnerprofile.profile_image.url }}
+                    {% elif user.educatorprofile.profile_image %}
+                       {{ user.educatorprofile.profile_image.url }}
+                    {% else %}
+                       {% static 'images/prof_images/default_profile.jpg' %}
+                    {% endif %}"
+                         alt="Profile Picture"
+                         class="w-full h-full object-cover rounded-full">
+                    <label for="{{ form.profile_image.id_for_label }}"
+                           class="absolute inset-0 w-full h-full cursor-pointer flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-full">
+                        <span class="text-white text-sm font-semibold">Change Photo</span>
+                    </label>
+                    {{ form.profile_image }}
+                </div>
+            </div>
+            <h1 class="text-2xl font-bold text-center mt-20 mb-4">{{ user.full_name }}</h1>
+
+            {% if is_educator %}
+            <label class="block text-gray-700 font-bold mb-2">Best Describe</label>
+            <p class="text-gray-600  mb-6">{{ form.best_describe }}</p>
+
+            {% endif %}
+
+
+            <a href="{% url 'edit_profile' %}">
+                <button class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">
+                    Save Details
+                </button>
+            </a>
+        </div>
+
+
+        <div class="md:w-2/3 md:ml-4">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-4">Edit Your Profile</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Full Name</label>
+                        <p class="text-gray-600">{{ user_change.full_name }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Email</label>
+                        <p class="text-gray-600">{{ user_change.email }}</p>
+                    </div>
+
+                    {% if is_educator %}
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Phone</label>
+                        <p class="text-gray-600">+91 {{ form.phone }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Location</label>
+                        <p class="text-gray-600">{{ form.location }}</p>
+                    </div>
+                    {% else %}
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Phone</label>
+                        <p class="text-gray-600">+91 {{ form.phone }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Location</label>
+                        <p class="text-gray-600">{{ form.location }}</p>
+                    </div>
+                    {% endif %}
+
+
+
+                    {% if is_educator %}
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Qualification</label>
+                        <a href="#" class=" hover:underline">{{ form.qualification }}</a>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Experience</label>
+                        <a href="#" class=" hover:underline">{{ form.experience }}</a>
+                    </div>
+                    {% endif %}
+
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Website</label>
+                        <a href="#" class="text-blue-500 hover:underline">{{ form.website }}</a>
+                    </div>
+
+                    {% if is_educator %}
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Subjects</label>
+                        <a href="#" class=" hover:underline">{{ form.subjects }}</a>
+                    </div>
+                    {% endif %}
+
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Github URL</label>
+                        <a href="#" class="text-blue-500 hover:underline">{{ form.github_url }}</a>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Linkedin URL</label>
+                        <a href="#" class="text-blue-500 hover:underline">{{ form.linkedin_url }}</a>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-gray-700 font-bold mb-2">Bio</label>
+                        <p class="text-gray-600">{{ form.bio }}.</p>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-4">
+                <h2 class="text-2xl font-semibold mb-4">Recent Activities</h2>
+                <ul class="space-y-4">
+                    <li class="flex items-center">
+                        <div class="bg-blue-100 p-2 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Created a new project</p>
+                            <p class="text-sm text-gray-500">2 hours ago</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center">
+                        <div class="bg-green-100 p-2 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M7 11l5-5m0 0l5 5m-5-5v12"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Updated profile picture</p>
+                            <p class="text-sm text-gray-500">1 day ago</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center">
+                        <div class="bg-yellow-100 p-2 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Edited project details</p>
+                            <p class="text-sm text-gray-500">3 days ago</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

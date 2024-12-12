@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Django migrations
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.pyd
+*/migrations/__pycache__/
+*/migrations/*.log
+*/migrations/*.sqlite3
+*/migrations/*.db
+*/migrations/*.sqlite3-journal
+
+# PyCharm project files
+.idea/
+
+# Environment variables file
+.env
+
+# If you're using virtual environments
+venv/
+.venv/
+
+# VS Code project files
+.vscode/
+
+# Testing cache
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+
+
+# System files
+.DS_Store
+Thumbs.db

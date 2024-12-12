@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educator Showcase</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    {% include 'nav_base.html' %}
+
+    <div class="container mx-auto p-8 mt-16">
+        <h1 class="text-4xl font-bold text-center mb-8">Educator Showcase</h1>
+        <div class="mb-8">
+    <form method="GET" action="{% url 'educator_search' %}" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+        <div class="w-full md:w-1/3 mb-4 md:mb-0">
+            <input type="text" name="educator_query"  value="{{ request.GET.educator_query }}" placeholder="Search educators by name or subject" class="w-full py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+        </div>
+        <div class="w-full md:w-1/3 mb-4 md:mb-0">
+            <select name="sort_by" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">Sort by...</option>
+                <option value="creation_date">Creation Date</option>
+                <option value="number_of_students">Number of Students</option>
+                <option value="classroom_name">Educator Name</option>
+            </select>
+        </div>
+        <div class="w-full md:w-1/3 mb-4 md:mb-0">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-auto">
+                Search
+            </button>
+        </div>
+    </form>
+</div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for educator in educators %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-300 cursor-pointer">
+                    <div class="relative h-48">
+                        <img src="{{ educator.banner_image.url }}" alt="Banner image" class="w-full h-full object-cover">
+                        <img src="{{ educator.profile_image.url }}" alt="{{ educator.full_name }}" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-24 h-24 rounded-full border-4 border-white">
+                    </div>
+                    <div class="p-6 pt-14 text-center">
+                        <h2 class="text-2xl font-bold mb-2">{{ educator.user.full_name }}</h2>
+                        <p class="text-blue-600 font-semibold mb-2">{{ educator.expertise }}</p>
+                        <p class="text-gray-600 text-sm mb-4">{{ educator.bio }}</p>
+                        <div class="text-left mb-4">
+                            <p class="text-gray-700"><strong>Email:</strong> {{ educator.user.email }}</p>
+                            <p class="text-gray-700"><strong>Qualification:</strong> {{ educator.qualification }}</p>
+                            <p class="text-gray-700"><strong>Experience:</strong> {{ educator.experience }}+ Years</p>
+                            {% if educator.github_url %}
+                                <p class="text-gray-700"><strong>GitHub:</strong> <a href="{{ educator.github_url }}" class="text-blue-500 hover:underline">Link</a></p>
+                            {% endif %}
+                            {% if educator.linkedin_url %}
+                                <p class="text-gray-700"><strong>LinkedIn:</strong> <a href="{{ educator.linkedin_url }}" class="text-blue-500 hover:underline">Link</a></p>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'educator_profile' educator.user.id %}">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300">Visit Profile</button>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>search tab</h1>
+<form method="GET" action=".">
+    <label for="query">Search</label>
+    <input type="text" id="query" name="query" maxlength="100">
+
+</form>
+
+
+{% if query %}
+
+<p>You searched for {{ query }}</p>
+{% endif %}
+
+</body>
+</html>

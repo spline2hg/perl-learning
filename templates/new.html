@@ -1,0 +1,62 @@
+{% for partner in message_partners %}
+    <ul>
+        <li class="hover:bg-gray-100 transition duration-150 ease-in-out">
+            <a href="{% url 'messages_tab' message.receiver.id %}" class="flex items-center px-4 py-3 border-b">
+                <img class="h-10 w-10 rounded-full object-cover" src="{% if partner.learnerprofile.profile_image %}
+            {{ partner.learnerprofile.profile_image.url }}
+         {% elif partner.educatorprofile.profile_image %}
+            {{ partner.educatorprofile.profile_image.url }}
+         {% else %}
+            {% static 'images/prof_images/default_profile.jpg' %}
+         {% endif %}" alt="User avatar">
+                <div class="ml-3 flex-1">
+                    <p class="text-sm font-medium text-gray-900">{{ partner.full_name }}</p>
+                    <p class="text-xs text-gray-500">{{ partner.latest_message_text|truncatechars:50 }}</p>
+                </div>
+                <span class="text-xs text-gray-400">{{ partner.latest_message_time }} ago</span>
+            </a>
+        </li>
+
+        <!-- More list items... -->
+    </ul>
+{% empty %}
+    <li>You haven't exchanged messages with anyone yet.</li>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+recipient = get_object_or_404(acc.CustomUser, id=edu_user_id)
+
+    if request.method == "POST":
+        url = request.POST.get('url')
+        print(url)
+        form = Pm_Form(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.receiver = recipient
+            message.url = url
+            message.save()
+            return redirect('convo',edu_user_id)
+        else:
+            print('gone')
+    else:
+        form = Pm_Form()

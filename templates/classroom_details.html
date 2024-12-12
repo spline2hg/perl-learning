@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Chat Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    {% include 'nav_base.html' %}
+    <div class="container mx-auto p-4 h-screen flex">
+        <!-- Left Column -->
+        <div class="w-1/4 bg-white rounded-l-lg shadow-md flex flex-col">
+            <div class="p-4 border-b">
+                <h2 class="text-xl font-bold text-indigo-700">Welcome to {{ classroom.name }}</h2>
+                <p>Description: {{ classroom.description }}</p>
+                <p class="text-sm text-gray-600">Class Code: {{ classroom.room_code }}</p>
+                <p class="text-sm text-gray-600">Instructor: {{ classroom.educator.user.full_name }}</p>
+            </div>
+            <div class="p-4 flex-grow overflow-auto">
+                <h3 class="text-lg font-semibold mb-2">Shared Urls</h3>
+                <ul class="space-y-2">
+                                {% if is_joined %}
+                    <li class="bg-indigo-50 p-4 rounded-lg shadow-md max-w-full">
+    <ul class="list-none">
+        {% for message in cls_messages %}
+            {% if message.url %}
+                <li class="flex items-center space-x-2">
+                    <span class="text-indigo-600 font-bold">•</span>
+                    <a href="{{ message.url }}" target="_blank" class="block max-w-full">
+                        <p class="font-medium text-lg text-indigo-600 hover:underline whitespace-nowrap overflow-hidden text-ellipsis">
+                            {{ message.url }}
+                        </p>
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</li>
+{% endif %}
+                </ul>
+
+
+
+
+
+            <div class="flex space-x-2 mt-10 mb-20">
+
+        <button id="create-url-btn" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Share Meet url
+        </button>
+            </div>
+
+
+
+
+                <!-- Form for creating an url -->
+<form id="url-form" class="hidden mt-4" method="post" action="">
+    {% csrf_token %}
+    <textarea id="url-content" name="url" class="w-full p-2 border rounded" rows="4" placeholder="Enter the url..."></textarea>
+    <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mt-2">
+        Submit URL
+    </button>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+                {% if request.user.user_type == 'educator' and classroom.educator.user == request.user %}
+    <form method="POST" action="{% url 'remove_classroom' classroom.id %}">
+        {% csrf_token %}
+        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-2.5">Remove Classroom</button>
+    </form>
+{% else %}
+    {% if is_joined %}
+        <form method="POST" action="{% url 'leave_classroom' classroom.id %}">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-2.5">Leave Classroom</button>
+        </form>
+    {% else %}
+        <form method="POST" action="{% url 'join_classroom_wc' classroom.id %}">
+            {% csrf_token %}
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2.5">
+              Join Classroom
+            </button>
+        </form>
+    {% endif %}
+{% endif %}
+            </div>
+        </div>
+
+        <!-- Middle Section -->
+
+        <div class="w-1/2 bg-white border-l border-r flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="text-xl font-semibold">Class Chat</h2>
+                <div class="flex space-x-2">
+                    <button class="text-gray-600 hover:text-indigo-600"><i class="fas fa-search"></i></button>
+                    <button class="text-gray-600 hover:text-indigo-600"><i class="fas fa-bell"></i></button>
+                </div>
+            </div>
+            <div class="flex-grow overflow-auto p-4 space-y-4" id="chat-messages">
+                <!-- Sample messages -->
+            {% if is_joined %}
+
+                {% for message in cls_messages %}
+                {% if message.content %}
+                    {% if not message.sender == request.user %}
+                        <div class="flex items-start">
+                            <img src="{% if message.sender.learnerprofile.profile_image %}
+                                 {{ message.sender.learnerprofile.profile_image.url }}
+                              {% elif message.sender.educatorprofile.profile_image %}
+                                 {{ message.sender.educatorprofile.profile_image.url }}
+                              {% else %}
+                                 /media/profile_images/profile_d.png  <!-- Ensure this path is correct -->
+                              {% endif %}"
+                         alt="User Avatar" class="w-8 h-8 rounded-full mr-5">
+                            <div>
+                                <p class="font-semibold">{{ message.sender.full_name }}</p>
+                                <p class="bg-gray-100 p-2 rounded-lg">{{ message.content }}</p>
+<!--                                <p class="bg-gray-100 p-2 rounded-lg">{{ message.sender.educatorprofile.profile_image.url }}</p>-->
+                                 <span class="text-xs text-gray-500 leading-none">{{ message.created_at|timesince }} ago</span>
+
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="flex items-start justify-end">
+                            <div class="text-right">
+                                <p class="font-semibold">You</p>
+                                <p class="bg-indigo-100 p-2 rounded-lg">{{ message.content }}</p>
+                                <span class="text-xs text-gray-500 leading-none">{{ message.created_at|timesince }} ago</span>
+
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if is_joined %}
+
+            <form method="post" action="">
+                {% csrf_token %}
+            <div class="p-4 border-t">
+                <div class="flex items-center bg-gray-100 rounded-full">
+                    <input name="content" type="text" placeholder="Type your message..." class="flex-grow bg-transparent px-4 py-2 focus:outline-none">
+                    <button type="submit" class="bg-indigo-600 text-white rounded-full p-2 mx-2 hover:bg-indigo-700 transition duration-300">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+
+                </div>
+            </div>
+                </form>
+{% endif %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="w-1/4 bg-white rounded-r-lg shadow-md flex flex-col">
+            <div class="p-4 border-b">
+                <a href="{% url 'meeting' %}">
+                <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-full hover:bg-indigo-700 transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-video mr-2"></i> Create Meeting
+                </button>
+                    </a>
+            </div>
+            <div class="p-4 flex-grow overflow-auto">
+                <h3 class="text-lg font-semibold mb-2">Joined Participents</h3>
+                <div class="space-y-2">
+                    {% for student in students %}
+                    <div class="bg-green-100 p-2 rounded">
+<!--                        <p class="font-medium">{{ student.user.email }}</p>-->
+                        <p class="font-medium">{{ student.user.full_name }}</p>
+<!--                        <p class="text-sm text-gray-600">Now on Tuesdays and Thursdays</p>-->
+                    </div>
+                    {% endfor %}
+
+                    {% for student in additional_educators %}
+                    <div class="bg-green-100 p-2 rounded">
+<!--                        <p class="font-medium">{{ student.user.email }}</p>-->
+                        <p class="font-medium">{{ student.user.full_name }}</p>
+<!--                        <p class="text-sm text-gray-600">Now on Tuesdays and Thursdays</p>-->
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+<!--            <div class="p-4 flex-grow overflow-auto">-->
+<!--                <h3 class="text-lg font-semibold mb-2">Notes & Alerts</h3>-->
+<!--                <div class="space-y-2">-->
+<!--                    <div class="bg-yellow-100 p-2 rounded">-->
+<!--                        <p class="font-medium">Quiz Tomorrow</p>-->
+<!--                        <p class="text-sm text-gray-600">Don't forget to study Chapter 2!</p>-->
+<!--                    </div>-->
+<!--                    <div class="bg-green-100 p-2 rounded">-->
+<!--                        <p class="font-medium">Office Hours Changed</p>-->
+<!--                        <p class="text-sm text-gray-600">Now on Tuesdays and Thursdays</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+
+            <div class="p-4 flex-grow overflow-auto">
+    <h3 class="text-lg font-semibold mb-2">Notes & Alerts</h3>
+    <div class="space-y-2 mb-4">
+        <div class="flex space-x-2">
+<!---->
+<!--            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">-->
+<!--                Create Note-->
+<!--            </button>-->
+<!--        </a>-->
+<!--            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">-->
+<!--                Create Alert-->
+<!--            </button>-->
+<!--        </a>-->
+
+            {% if is_joined %}
+            <div class="flex space-x-2">
+        <button id="create-note-btn" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Create Note
+        </button>
+        <button id="create-alert-btn" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            Create Alert
+        </button>
+    </div>
+    </div>
+        {% for alert in alerts %}
+        <div class="bg-yellow-100 p-2 rounded">
+            <p class="font-medium">{{ alert.name }}</p>
+            <p class="text-sm text-gray-600">{{ alert.content }}</p>
+        </div>
+        {% endfor %}
+        {% for note in notes %}
+        <div class="bg-green-100 p-2 rounded">
+            <p class="font-medium">{{ note.name }}</p>
+            <p class="text-sm text-gray-600">{{ note.content }}</p>
+        </div>
+        {% endfor %}
+    </div>
+                {% endif %}
+<!--    <div class="flex space-x-2">-->
+<!--            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">-->
+<!--                Create Note-->
+<!--            </button>-->
+<!--        </a>-->
+<!--            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">-->
+<!--                Create Alert-->
+<!--            </button>-->
+<!--        </a>-->
+    </div>
+
+            <!-- Hidden form for creating note -->
+<!--    <div id="note-form" class="hidden mt-4">-->
+<!--        <textarea id="note-content" class="w-full p-2 border rounded" rows="4" placeholder="Enter note content..."></textarea>-->
+<!--        <button id="submit-note" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mt-2">-->
+<!--            Submit Note-->
+<!--        </button>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Hidden form for creating alert &ndash;&gt;-->
+<!--    <div id="alert-form" class="hidden mt-4">-->
+<!--        <textarea id="alert-content" class="w-full p-2 border rounded" rows="4" placeholder="Enter alert content..."></textarea>-->
+<!--        <button id="submit-alert" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mt-2">-->
+<!--            Submit Alert-->
+<!--        </button>-->
+<!--    </div>-->
+
+            <!-- Form for creating a note -->
+<form id="note-form" class="hidden mt-4" method="post" action="{% url 'create_note' classroom.id %}">
+    {% csrf_token %}
+    <textarea id="note-content" name="content" class="w-full p-2 border rounded" rows="4" placeholder="Enter note content..."></textarea>
+    <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mt-2">
+        Submit Note
+    </button>
+</form>
+
+<!-- Form for creating an alert -->
+<form id="alert-form" class="hidden mt-4" method="post" action="{% url 'create_alert' classroom.id %}">
+    {% csrf_token %}
+    <textarea id="alert-content" name="content" class="w-full p-2 border rounded" rows="4" placeholder="Enter alert content..."></textarea>
+    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mt-2">
+        Submit Alert
+    </button>
+</form>
+
+</div>
+</div>
+
+
+
+    </div>
+
+
+<script>
+    document.getElementById('create-note-btn').addEventListener('click', function() {
+        document.getElementById('note-form').classList.remove('hidden');
+        document.getElementById('alert-form').classList.add('hidden');
+    });
+
+    document.getElementById('create-alert-btn').addEventListener('click', function() {
+        document.getElementById('alert-form').classList.remove('hidden');
+        document.getElementById('note-form').classList.add('hidden');
+    });
+
+
+
+    document.getElementById('create-url-btn').addEventListener('click', function() {
+        document.getElementById('url-form').classList.remove('hidden');
+        document.getElementById('alert-form').classList.add('hidden');
+        document.getElementById('nott-form').classList.add('hidden');
+    });
+
+
+    // Optional: Add event listeners to submit buttons to handle form submissions
+    document.getElementById('submit-note').addEventListener('click', function() {
+        // Handle note submission
+        var content = document.getElementById('note-content').value;
+        console.log('Note content:', content);
+        // Clear the textarea and hide the form
+        document.getElementById('note-content').value = '';
+        document.getElementById('note-form').classList.add('hidden');
+    });
+
+    document.getElementById('submit-alert').addEventListener('click', function() {
+        // Handle alert submission
+        var content = document.getElementById('alert-content').value;
+        console.log('Alert content:', content);
+        // Clear the textarea and hide the form
+        document.getElementById('alert-content').value = '';
+        document.getElementById('alert-form').classList.add('hidden');
+    });
+
+
+
+
+    // Optional: Add event listeners to submit buttons to handle form submissions
+    document.getElementById('submit-note').addEventListener('click', function() {
+        // Handle note submission
+        var content = document.getElementById('note-content').value;
+        console.log('Note content:', content);
+        // Clear the textarea and hide the form
+        document.getElementById('url-content').value = '';
+        document.getElementById('url-form').classList.add('hidden');
+    });
+
+</script>
+</body>
+
+</html>

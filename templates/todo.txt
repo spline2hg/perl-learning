@@ -1,0 +1,1069 @@
+location
+website
+bio
+phone
+best_describe
+
+
+
+
+{% if learner_profile %}
+{% elif educator_profile %}
+{% endif %}
+
+
+
+
+<!-- Profile Picture Container and Wrapper -->
+<div class="flex justify-center items-center mt-2.5">
+  <div class="relative w-[150px] h-[150px] rounded-full overflow-hidden cursor-pointer">
+    <img src="{% if user.learnerprofile.profile_image %}
+                            {{ user.learnerprofile.profile_image.url }}
+                         {% elif user.educatorprofile.profile_image %}
+                            {{ user.educatorprofile.profile_image.url }}
+                         {% else %}
+                            {% static 'images/prof_images/default_profile.jpg' %}
+                         {% endif %}" alt="Profile Picture"
+                 class="w-32 h-32 rounded-full border-4 border-white absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform duration-300 cursor-pointer">
+            {{ form.profile_image }}
+  </div>
+</div>
+
+<!-- Banner Picture Wrapper -->
+<div class="relative w-[450px] h-[150px] overflow-hidden cursor-pointer">
+  <img class="absolute inset-0 w-full h-full object-cover rounded-t-lg"
+                     src="{% if user.learnerprofile.banner_image %}
+                 {{ user.learnerprofile.banner_image.url }}
+              {% elif user.educatorprofile.banner_image %}
+                 {{ user.educatorprofile.banner_image.url }}
+              {% else %}
+                 {% static 'images/prof_images/default_banner.jpg' %}
+              {% endif %}"
+                     alt="Banner Image">
+                {{ form.banner_image }}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--{% load static %}-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    {% include 'nav_base.html' %}
+    <div class="container mx-auto p-4">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Banner Picture Wrapper -->
+            <div class="relative h-48 w-full">
+                <img class="w-full h-full object-cover"
+                     src="{% if user.learnerprofile.banner_image %}
+                              {{ user.learnerprofile.banner_image.url }}
+                           {% elif user.educatorprofile.banner_image %}
+                              {{ user.educatorprofile.banner_image.url }}
+                           {% else %}
+                              {% static 'images/prof_images/default_banner.jpg' %}
+                           {% endif %}"
+                     alt="Banner Image">
+                <label for="{{ form.banner_image.id_for_label }}" class="absolute inset-0 w-full h-full cursor-pointer flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <span class="text-white text-lg font-semibold">Change Banner</span>
+                </label>
+                {{ form.banner_image }}
+            </div>
+
+            <!-- Profile Picture Container and Wrapper -->
+            <div class="relative -mt-24 flex ">
+                <div class="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white bg-white">
+                    <img src="{% if user.learnerprofile.profile_image %}
+                                   {{ user.learnerprofile.profile_image.url }}
+                                {% elif user.educatorprofile.profile_image %}
+                                   {{ user.educatorprofile.profile_image.url }}
+                                {% else %}
+                                   {% static 'images/prof_images/default_profile.jpg' %}
+                                {% endif %}"
+                         alt="Profile Picture"
+                         class="w-full h-full object-cover rounded-full">
+                    <label for="{{ form.profile_image.id_for_label }}" class="absolute inset-0 w-full h-full cursor-pointer flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-full">
+                        <span class="text-white text-lg font-semibold">Change Photo</span>
+                    </label>
+                    {{ form.profile_image }}
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h1 class="text-2xl font-bold text-center mt-20 mb-4">{{ user.full_name }}</h1>
+
+        {% if learner_profile %}
+        <p class="text-gray-600 text-center mb-6">{{ learner_profile.best_describe }}</p>
+        {% elif educator_profile %}
+        <p class="text-gray-600 text-center mb-6">{{ educator_profile.best_describe }}</p>
+
+        {% endif %}
+        <a href="{% url 'edit_profile' %}">
+            <button class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">
+                Edit Profile
+            </button>
+        </a>
+    </div>
+    <div class="md:w-2/3 md:ml-4">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">User Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Full Name</label>
+                    <p class="text-gray-600">{{ user.full_name }}</p>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Email</label>
+                    <p class="text-gray-600">{{ user.email }}</p>
+                </div>
+
+                {% if learner_profile %}
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Phone</label>
+                    <p class="text-gray-600">+91 {{ learner_profile.phone }}</p>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Location</label>
+                    <p class="text-gray-600">{{ learner_profile.location }}</p>
+                </div>
+                {% elif educator_profile %}
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Phone</label>
+                    <p class="text-gray-600">+91 {{ educator_profile.phone }}</p>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Location</label>
+                    <p class="text-gray-600">{{ educator_profile.location }}</p>
+                </div>
+                {% endif %}
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Joined</label>
+                    <p class="text-gray-600">{{ user.date_joined }}</p>
+                </div>
+
+
+                {% if learner_profile %}
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Website</label>
+                    <a href="#" class="text-blue-500 hover:underline">www.johndoe.com</a>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Website</label>
+                    <a href="#" class="text-blue-500 hover:underline">www.johndoe.com</a>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Website</label>
+                    <a href="#" class="text-blue-500 hover:underline">www.johndoe.com</a>
+                </div>
+                {% elif educator_profile %}
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Website</label>
+                    <a href="#" class="text-blue-500 hover:underline">{{ educator_profile.website }}</a>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Github URL</label>
+                    <a href="#" class="text-blue-500 hover:underline">{{ educator_profile.github_url }}</a>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Linkedin URL</label>
+                    <a href="#" class="text-blue-500 hover:underline">{{ educator_profile.linkedin_url }}</a>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-gray-700 font-bold mb-2">Bio</label>
+                    <p class="text-gray-600">{{ educator_profile.bio }}.</p>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-4">
+            <h2 class="text-2xl font-semibold mb-4">Recent Activities</h2>
+            <ul class="space-y-4">
+                <li class="flex items-center">
+                    <div class="bg-blue-100 p-2 rounded-full mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Created a new project</p>
+                        <p class="text-sm text-gray-500">2 hours ago</p>
+                    </div>
+                </li>
+                <li class="flex items-center">
+                    <div class="bg-green-100 p-2 rounded-full mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M7 11l5-5m0 0l5 5m-5-5v12"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Updated profile picture</p>
+                        <p class="text-sm text-gray-500">1 day ago</p>
+                    </div>
+                </li>
+                <li class="flex items-center">
+                    <div class="bg-yellow-100 p-2 rounded-full mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Edited project details</p>
+                        <p class="text-sm text-gray-500">3 days ago</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    interests = models.ManyToManyField(Interest, blank=True)
+    age = models.IntegerField(null=True, blank=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
+    profile_image = models.ImageField(upload_to='profile_images', default='profile_images/profile_d.png')
+    banner_image = models.ImageField(upload_to='banner_images', default='banner_images/banner_d.jpg')
+
+
+
+
+
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
+    subjects = models.ManyToManyField(Subject, blank=True)
+    qualification = models.TextField(blank=True)
+    experience = models.IntegerField(null=True,blank=True)
+    github_url = models.URLField(null=True, blank=True)
+    linkedin_url = models.URLField(null=True, blank=True)
+    profile_image = models.ImageField(upload_to='profile_images', default='profile_images/profile_d.png')
+    banner_image = models.ImageField(upload_to='banner_images', default='banner_images/banner_d.jpg')
+
+
+#     new fields
+    location = models.CharField(max_length=255, blank=True)
+    website = models.URLField(null=True, blank=True)
+    bio = models.TextField(blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    best_describe = models.CharField(max_length=255, blank=True)
+
+
+phone
+location
+best decsribe
+bio
+website
+github url
+linkedin url
+
+
+samweesame
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Joined Classrooms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">My Joined Classrooms</h1>
+            <p class="text-gray-600 dark:text-gray-300">Manage your enrolled classrooms and upcoming meetings</p>
+        </header>
+
+        <div class="flex justify-between items-center mb-6">
+            <div class="relative">
+                <input type="text" placeholder="Search classrooms..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <div class="flex space-x-4">
+                <select class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option>Filter by Subject</option>
+                    <option>Mathematics</option>
+                    <option>Science</option>
+                    <option>History</option>
+                    <option>Literature</option>
+                </select>
+                <button id="darkModeToggle" class="bg-gray-200 dark:bg-gray-700 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Classroom Card 1 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+                <div class="p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-2">Advanced Mathematics</h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Educator: Dr. Jane Smith</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">28 Students</span>
+                        <span class="text-sm font-medium text-blue-600 dark:text-blue-400">Mathematics</span>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200 mb-1">Upcoming Meeting</h3>
+                        <p class="text-gray-600 dark:text-gray-300">May 15, 2023 - 10:00 AM</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">12 Meetings Held</span>
+                        <a href="#" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-300">
+                            Manage Classroom
+                            <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classroom Card 2 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+                <div class="p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-2">World History</h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Educator: Prof. Michael Johnson</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">35 Students</span>
+                        <span class="text-sm font-medium text-green-600 dark:text-green-400">History</span>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200 mb-1">Upcoming Meeting</h3>
+                        <p class="text-gray-600 dark:text-gray-300">May 17, 2023 - 2:00 PM</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">8 Meetings Held</span>
+                        <a href="#" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-300">
+                            Manage Classroom
+                            <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classroom Card 3 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+                <div class="p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-2">Modern Literature</h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Educator: Dr. Emily Brown</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">22 Students</span>
+                        <span class="text-sm font-medium text-purple-600 dark:text-purple-400">Literature</span>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200 mb-1">Upcoming Meeting</h3>
+                        <p class="text-gray-600 dark:text-gray-300">May 16, 2023 - 11:30 AM</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">10 Meetings Held</span>
+                        <a href="#" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-300">
+                            Manage Classroom
+                            <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Classroom</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Advanced Mathematics</h1>
+            <p class="text-lg">Prof. John Doe</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-8 px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Live Session</h2>
+                    <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg mb-4">
+                        <img src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80" alt="Video call" class="object-cover rounded-lg">
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-full"><i class="fas fa-video"></i></button>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-full"><i class="fas fa-microphone"></i></button>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-full"><i class="fas fa-desktop"></i></button>
+                        <button class="bg-red-500 text-white px-4 py-2 rounded-full"><i class="fas fa-phone-slash"></i></button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Whiteboard</h2>
+                    <div class="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg mb-4">
+                        <canvas id="whiteboard" class="w-full h-full rounded-lg border border-gray-300"></canvas>
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button class="bg-gray-200 px-4 py-2 rounded-full"><i class="fas fa-pen"></i></button>
+                        <button class="bg-gray-200 px-4 py-2 rounded-full"><i class="fas fa-eraser"></i></button>
+                        <button class="bg-gray-200 px-4 py-2 rounded-full"><i class="fas fa-shapes"></i></button>
+                        <button class="bg-gray-200 px-4 py-2 rounded-full"><i class="fas fa-save"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Participants</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Prof. John Doe" class="w-10 h-10 rounded-full mr-3">
+                            <span>Prof. John Doe</span>
+                            <span class="ml-auto text-green-500"><i class="fas fa-circle"></i></span>
+                        </li>
+                        <li class="flex items-center">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Alice Smith" class="w-10 h-10 rounded-full mr-3">
+                            <span>Alice Smith</span>
+                            <span class="ml-auto text-green-500"><i class="fas fa-circle"></i></span>
+                        </li>
+                        <li class="flex items-center">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Bob Johnson" class="w-10 h-10 rounded-full mr-3">
+                            <span>Bob Johnson</span>
+                            <span class="ml-auto text-red-500"><i class="fas fa-circle"></i></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Chat</h2>
+                    <div class="h-64 overflow-y-auto mb-4 border border-gray-200 rounded p-2">
+                        <div class="mb-2">
+                            <span class="font-semibold">Alice:</span> Hello everyone!
+                        </div>
+                        <div class="mb-2">
+                            <span class="font-semibold">Bob:</span> Hi Alice, how are you?
+                        </div>
+                        <div class="mb-2">
+                            <span class="font-semibold">Prof. John:</span> Welcome to the class!
+                        </div>
+                    </div>
+                    <form class="flex">
+                        <input type="text" placeholder="Type your message..." class="flex-grow border border-gray-300 rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-4">Resources</h2>
+                <div class="mb-4">
+                    <input type="text" placeholder="Search resources..." class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-blue-600 hover:underline"><i class="far fa-file-pdf mr-2"></i>Lecture Notes - Week 1</a></li>
+                    <li><a href="#" class="text-blue-600 hover:underline"><i class="far fa-file-video mr-2"></i>Tutorial Video - Calculus Basics</a></li>
+                    <li><a href="#" class="text-blue-600 hover:underline"><i class="far fa-file-alt mr-2"></i>Practice Problems Set 1</a></li>
+                </ul>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-4">Assignments</h2>
+                <ul class="space-y-4">
+                    <li class="flex items-center justify-between">
+                        <span>Assignment 1: Limits and Continuity</span>
+                        <span class="text-sm text-gray-500">Due: May 15, 2023</span>
+                        <button class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">Submit</button>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span>Assignment 2: Derivatives</span>
+                        <span class="text-sm text-gray-500">Due: May 22, 2023</span>
+                        <button class="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">Not Open</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2023 Virtual Classroom. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Classroom</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold" aria-label="Classroom Title">Advanced Mathematics</h1>
+            <p class="text-sm" aria-label="Educator Name">Dr. Jane Smith</p>
+        </div>
+        <button class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">End Class</button>
+    </header>
+
+    <main class="container mx-auto p-4 flex flex-col lg:flex-row gap-4">
+        <section class="lg:w-2/3 space-y-4">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-2">Video Call</h2>
+                <div class="aspect-w-16 aspect-h-9 bg-gray-800 rounded-lg mb-2">
+                    <img src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Video call placeholder" class="object-cover rounded-lg">
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Mute</button>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Video Off</button>
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Share Screen</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-2">Whiteboard</h2>
+                <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg mb-2">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Whiteboard placeholder" class="object-cover rounded-lg">
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Draw</button>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Text</button>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Shapes</button>
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="lg:w-1/3 space-y-4">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-2">Participants</h2>
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Jane Smith" class="w-8 h-8 rounded-full mr-2">
+                        <span>Dr. Jane Smith (Host)</span>
+                    </li>
+                    <li class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="John Doe" class="w-8 h-8 rounded-full mr-2">
+                        <span>John Doe</span>
+                    </li>
+                    <li class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Emily Brown" class="w-8 h-8 rounded-full mr-2">
+                        <span>Emily Brown</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-2">Resources</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-blue-600 hover:underline">Lecture Slides</a></li>
+                    <li><a href="#" class="text-blue-600 hover:underline">Homework Assignment</a></li>
+                    <li><a href="#" class="text-blue-600 hover:underline">Additional Reading</a></li>
+                </ul>
+                <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Upload Resource</button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-2">Assignments</h2>
+                <ul class="space-y-2">
+                    <li class="flex justify-between items-center">
+                        <span>Problem Set 1</span>
+                        <span class="text-sm text-gray-500">Due: May 15</span>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span>Midterm Project</span>
+                        <span class="text-sm text-gray-500">Due: June 1</span>
+                    </li>
+                </ul>
+                <button class="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full">Submit Assignment</button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-2">Chat</h2>
+                <div class="h-48 overflow-y-auto mb-4 bg-gray-100 p-2 rounded">
+                    <div class="mb-2">
+                        <span class="font-semibold">John:</span> Hi everyone!
+                    </div>
+                    <div class="mb-2">
+                        <span class="font-semibold">Emily:</span> Hello! Excited for today's class.
+                    </div>
+                </div>
+                <div class="flex">
+                    <input type="text" placeholder="Type your message..." class="flex-grow px-2 py-1 border rounded-l">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r">Send</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Chat Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    {% include 'nav_base.html' %}
+    <div class="container mx-auto p-4 h-screen flex">
+        <!-- Left Column -->
+        <div class="w-1/4 bg-white rounded-l-lg shadow-md flex flex-col">
+            <div class="p-4 border-b">
+                <h2 class="text-2xl font-bold text-indigo-700">Welcome to {{ classroom.name }}</h2>
+                <p>Description: {{ classroom.description }}</p>
+                <p class="text-sm text-gray-600">Class Code: {{ classroom.room_code }}</p>
+                <p class="text-sm text-gray-600">Instructor: {{ classroom.educator.user.full_name }}</p>
+            </div>
+            <div class="p-4 flex-grow overflow-auto">
+                <h3 class="text-lg font-semibold mb-2">Upcoming Meetings</h3>
+                <ul class="space-y-2">
+                    <li class="bg-indigo-50 p-2 rounded">
+                        <p class="font-medium">Lecture: Chapter 3</p>
+                        <p class="text-sm text-gray-600">Today, 2:00 PM</p>
+                        <a href="#" class="text-xs text-indigo-600 hover:underline">Join Meeting</a>
+                    </li>
+                    <li class="bg-indigo-50 p-2 rounded">
+                        <p class="font-medium">Office Hours</p>
+                        <p class="text-sm text-gray-600">Tomorrow, 10:00 AM</p>
+                        <a href="#" class="text-xs text-indigo-600 hover:underline">Join Meeting</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Middle Section -->
+        <div class="w-1/2 bg-white border-l border-r flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="text-xl font-semibold">Class Chat</h2>
+                <div class="flex space-x-2">
+                    <button class="text-gray-600 hover:text-indigo-600"><i class="fas fa-search"></i></button>
+                    <button class="text-gray-600 hover:text-indigo-600"><i class="fas fa-bell"></i></button>
+                </div>
+            </div>
+            <div class="flex-grow overflow-auto p-4 space-y-4" id="chat-messages">
+                <!-- Sample messages -->
+                <div class="flex items-start">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User Avatar" class="w-8 h-8 rounded-full mr-3">
+                    <div>
+                        <p class="font-semibold">Alice Johnson</p>
+                        <p class="bg-gray-100 p-2 rounded-lg">Has anyone started on the homework yet?</p>
+                    </div>
+                </div>
+                <div class="flex items-start justify-end">
+                    <div class="text-right">
+                        <p class="font-semibold">You</p>
+                        <p class="bg-indigo-100 p-2 rounded-lg">I'm working on it now. It's pretty challenging!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t">
+                <div class="flex items-center bg-gray-100 rounded-full">
+                    <input type="text" placeholder="Type your message..." class="flex-grow bg-transparent px-4 py-2 focus:outline-none">
+                    <button class="bg-indigo-600 text-white rounded-full p-2 mx-2 hover:bg-indigo-700 transition duration-300">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="w-1/4 bg-white rounded-r-lg shadow-md flex flex-col">
+            <div class="p-4 border-b">
+                <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-full hover:bg-indigo-700 transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-video mr-2"></i> Create Meeting
+                </button>
+            </div>
+            <div class="p-4 flex-grow overflow-auto">
+                <h3 class="text-lg font-semibold mb-2">Notes & Alerts</h3>
+                <div class="space-y-2">
+                    <div class="bg-yellow-100 p-2 rounded">
+                        <p class="font-medium">Quiz Tomorrow</p>
+                        <p class="text-sm text-gray-600">Don't forget to study Chapter 2!</p>
+                    </div>
+                    <div class="bg-green-100 p-2 rounded">
+                        <p class="font-medium">Office Hours Changed</p>
+                        <p class="text-sm text-gray-600">Now on Tuesdays and Thursdays</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {% if request.user.user_type == 'educator' and classroom.educator.user == request.user %}
+                <form method="POST" action="{% url 'remove_classroom' classroom.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove Classroom</button>
+                </form>
+            {% else %}
+                {% if is_joined %}
+                    <form method="POST" action="{% url 'leave_classroom' classroom.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Leave Classroom</button>
+                    </form>
+                {% else %}
+                    <form method="POST" action="{% url 'join_classroom_wc' classroom.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                          Join Classroom
+                        </button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+            <form method="post" action="{% url 'join_classroom' %}">
+                {% csrf_token %}
+                <input name="content " type="text" placeholder="Type your message..." class="flex-grow bg-transparent px-4 py-2 focus:outline-none">
+                    <button type="submit" class="bg-indigo-600 text-white rounded-full p-2 mx-2 hover:bg-indigo-700 transition duration-300">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+            </form>
+
+
+
+
+
+
+
+
+            <!--                    <form method="POST" action="{% url 'join_classroom_wc' classroom.id %}">-->
+
+
+
+
+
+<img src="{% if message.sender.learnerprofile.profile_image %}
+                         {{ message.sender.learnerprofile.profile_image.url }}
+                      {% elif message.sender.educatorprofile.profile_image %}
+                         {{ message.sender.educatorprofile.profile_image.url }}
+                      {% endif %} %}" alt="User Avatar" class="w-8 h-8 rounded-full mr-3">
+
+
+
+
+
+
+
+
+<div class="container mx-auto p-4 h-screen flex">
+        <!-- Left Column -->
+        <div class="w-1/4 bg-white rounded-l-lg shadow-md flex flex-col">
+            <div class="p-4 border-b">
+                <h2 class="text-xl font-bold text-indigo-700">Welcome to {{ classroom.name }}</h2>
+                <p>Description: {{ classroom.description }}</p>
+                <p class="text-sm text-gray-600">Class Code: {{ classroom.room_code }}</p>
+                <p class="text-sm text-gray-600">Instructor: {{ classroom.educator.user.full_name }}</p>
+            </div>
+            <div class="p-4 flex-grow overflow-auto">
+                <h3 class="text-lg font-semibold mb-2">Upcoming Meetings</h3>
+                <ul class="space-y-2">
+                    <li class="bg-indigo-50 p-2 rounded">
+                        <p class="font-medium">Lecture: Chapter 3</p>
+                        <p class="text-sm text-gray-600">Today, 2:00 PM</p>
+                        <a href="#" class="text-xs text-indigo-600 hover:underline">Join Meeting</a>
+                    </li>
+                    <li class="bg-indigo-50 p-2 rounded">
+                        <p class="font-medium">Office Hours</p>
+                        <p class="text-sm text-gray-600">Tomorrow, 10:00 AM</p>
+                        <a href="#" class="text-xs text-indigo-600 hover:underline">Join Meeting</a>
+                    </li>
+                </ul>
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+12-9 15:18
+implement sercah for evrything
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's Classroom Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    {% include 'nav_base.html' %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center text-indigo-700">Public Classrooms</h1>
+
+        <div class="mb-6 flex flex-wrap items-center justify-between">
+           <form method="GET" action="{% url 'classroom_search' %}" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+    <div class="flex items-center w-full md:w-2/3">
+        <input type="text" name="classroom_query" placeholder="Search classrooms..." class="w-full md:w-3/4 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <button type="submit" class="ml-4 px-4 py-2 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            Search
+        </button>
+    </div>
+    <div class="w-full md:w-2/4"> <!-- Adjusted width -->
+        <select name="sort_by" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">Sort by...</option>
+            <option value="creation_date">Creation Date</option>
+            <option value="number_of_students">Number of Students</option>
+            <option value="classroom_name">Classroom Name</option>
+        </select>
+    </div>
+</form>
+            <a href="{% url 'create_classroom' %}">
+            <button class="w-full md:w-auto bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+                <i class="fas fa-plus mr-2"></i>Create New Classroom
+            </button>
+                </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for classroom in classrooms %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 ease-in-out">
+                <div class="p-6">
+                    <h2 class="text-xl font-semibold mb-2 text-indigo-600">{{ classroom.name }}</h2>
+                    <p class="text-gray-600 mb-2"><i class="fas fa-users mr-2"></i>{{ classroom.student.count }} Students</p>
+                    <p class="text-gray-600 mb-2"><i class="fas fa-calendar-alt mr-2"></i>Created: {{ classroom.created_at|date:"M d, Y" }}</p>
+                    <p class="text-gray-600 mb-4"><i class="fas fa-info-circle mr-2"></i>{{ classroom.description|truncatechars:50 }}</p>
+                    <p class="text-gray-600 mb-4"><i class="fas fa-key mr-2"></i>Room Code: {{ classroom.room_code }}</p>
+                    <p class="text-gray-600 mb-4">
+                        <i class="fas fa-circle mr-2 {% if classroom.active %}text-green-500{% else %}text-red-500{% endif %}"></i>
+                        {{ classroom.active|yesno:"Active,Inactive" }}
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <a href="{% url 'edit_classroom' classroom.id %}">
+                        <button class="text-indigo-600 hover:text-indigo-800 focus:outline-none">
+                            <i class="fas fa-edit mr-1"></i>Edit
+                        </button>
+                            </a>
+                        <a href="{% url 'classroom_detail' classroom.id %}">
+                        <button class="text-indigo-600 hover:text-indigo-800 focus:outline-none">
+                            <i class="fas fa-eye mr-1"></i>View Details
+                        </button>
+                            </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center text-gray-500">
+                <p>No classrooms found. Create a new classroom to get started!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+!--    <div class="flex space-x-2">-->
+<!--        <a href="{% url 'create_note' %}">-->
+<!--            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">-->
+<!--                Create Note-->
+<!--            </button>-->
+<!--        </a>-->
+<!--        <a href="{% url 'create_alert' %}">-->
+<!--            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">-->
+<!--                Create Alert-->
+<!--            </button>-->
+<!--        </a>-->
+
+
+
+
+
+
+
+<!-- Form for creating an alert -->
+<form id="url-form" class="hidden mt-4" method="post" action="{% url 'create_alert' classroom.id %}">
+    {% csrf_token %}
+    <textarea id="alert-content" name="url" class="w-full p-2 border rounded" rows="4" placeholder="Enter the url..."></textarea>
+    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mt-2">
+        Submit Alert
+    </button>
+</form>
